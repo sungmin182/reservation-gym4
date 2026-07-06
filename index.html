@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4학년 체육공간 예약</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{
+  --text:#1F2B3D; --sub:#66758C; --canvas:#FFFFFF; --bg:#F4F7FB;
+  --soft:#F5F8FC; --soft2:#EDF2F9; --border:#E3EAF4;
+  --blue:#2B7BF3; --blue-strong:#1D5FD6; --blue-soft:#EAF2FE; --blue-line:#A9C7F5;
+  --green:#2FA36B; --green-soft:#E6F5EC;
+  --orange:#DF8A3A; --orange-soft:#FCF0E0;
+  --red:#E4574B; --red-soft:#FDEAE8;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Gowun Dodum',-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR","Malgun Gothic",sans-serif;color:var(--text);background:linear-gradient(180deg,#E7F1FE 0%,#F4F7FB 360px);min-height:100vh;font-size:16px;line-height:1.55}
+.wrap{max-width:1080px;margin:0 auto;padding:20px 24px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  background:linear-gradient(135deg,#2B7BF3 0%,#4D9AF8 55%,#6FB4FB 100%);
+  border-radius:20px;padding:20px 26px;margin-bottom:18px;box-shadow:0 10px 26px rgba(43,123,243,.20)}
+header h1{font-size:23px;margin:0;color:#fff;letter-spacing:-.01em}
+header .sub{font-size:13.5px;color:rgba(255,255,255,.88);margin-top:4px}
+.head-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.badge{font-size:12.5px;padding:5px 13px;border-radius:999px;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.4)}
+.badge.on{background:#fff;color:#1F8A5D;border-color:transparent}
+.badge.demo{background:#fff;color:#B96A22;border-color:transparent}
+.badge.admin{background:#fff;color:var(--blue-strong);border-color:transparent}
+button{font-family:inherit;font-size:15px;cursor:pointer}
+.btn{border:1px solid var(--border);background:var(--canvas);color:var(--text);border-radius:999px;padding:9px 18px;min-height:40px;transition:background .15s}
+.btn:hover{background:var(--soft2)}
+.btn.primary{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(43,123,243,.28)}
+.btn.primary:hover{background:var(--blue-strong)}
+.btn.danger{background:var(--red);border-color:var(--red);color:#fff}
+.btn.small{padding:5px 14px;min-height:34px;font-size:14px}
+header .btn{background:#fff;border-color:transparent;color:var(--blue-strong);font-weight:600}
+header .btn:hover{background:var(--blue-soft)}
+.tabs{display:inline-flex;gap:4px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:5px;margin:2px 0 20px;box-shadow:0 2px 10px rgba(31,43,61,.05)}
+.tabs button{border:none;background:none;padding:9px 20px;font-size:15px;color:var(--sub);border-radius:999px}
+.tabs button.active{color:#fff;background:var(--blue);font-weight:600;box-shadow:0 3px 10px rgba(43,123,243,.3)}
+.card{background:var(--canvas);border:1px solid var(--border);border-radius:18px;padding:26px;box-shadow:0 4px 18px rgba(31,43,61,.05)}
+.week-nav{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+.week-nav .label{font-size:18.5px;font-weight:700;margin:0 4px}
+.week-nav .parity-chip{font-size:13px;padding:4px 13px;border-radius:999px;background:var(--blue-soft);color:var(--blue-strong);border:1px solid #CBE0FC}
+.legend{display:flex;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin:12px 2px 14px}
+.legend span{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);border-radius:999px;padding:4px 13px}
+.dot{width:11px;height:11px;border-radius:4px;display:inline-block}
+.grid-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:18px;background:var(--canvas);box-shadow:0 4px 18px rgba(31,43,61,.05)}
+table.grid{width:100%;min-width:820px;border-collapse:separate;border-spacing:0}
+table.grid th{background:#F0F6FE;font-size:14px;font-weight:700;padding:12px 8px;border-bottom:1px solid var(--border);color:var(--text)}
+table.grid th .d{font-size:15.5px}
+table.grid th .pt{font-size:11.5px;font-weight:500;color:var(--sub);margin-left:4px}
+table.grid th.today-col{background:#DCEBFE;color:var(--blue-strong)}
+table.grid th.today-col .pt{color:var(--blue-strong)}
+table.grid td{border-bottom:1px solid var(--border);border-left:1px solid var(--border);padding:10px;vertical-align:top;min-width:128px}
+table.grid tr:last-child td{border-bottom:none}
+table.grid td:first-child,table.grid th:first-child{border-left:none}
+table.grid td.plabel{background:#F7FAFE;width:92px;min-width:92px;font-size:14.5px;font-weight:700;white-space:nowrap}
+table.grid td.plabel .t{display:block;font-size:12px;color:var(--sub);font-weight:400;margin-top:2px}
+.chip{display:flex;align-items:center;justify-content:space-between;width:100%;text-align:left;border-radius:12px;padding:9px 12px;font-size:14px;margin:4px 0;border:1px solid transparent;min-height:40px;gap:6px;font-family:inherit;transition:background .15s}
+.chip .who{font-weight:700;white-space:nowrap}
+.chip.avail{background:#F8FBFF;border:1.6px dashed var(--blue-line);color:var(--blue-strong)}
+.chip.avail:hover{background:var(--blue-soft);border-style:solid}
+.chip.resv{background:var(--blue-soft);color:var(--blue-strong);border:1px solid #CBE0FC}
+.chip.resv:hover{filter:brightness(.97)}
+.chip.fixed{background:var(--green-soft);color:#1F8A5D;border:1px solid #CDEBD9;cursor:default}
+.chip.past{opacity:.45;cursor:default;pointer-events:none}
+.rain{font-size:12.5px}
+.empty-cell{color:#B9C4D4;font-size:13px;text-align:center;padding:10px 0}
+h2{font-size:19px;margin:0 0 4px}
+h3{font-size:16px;margin:22px 0 8px}
+p.note{color:var(--sub);font-size:14px;margin:4px 0 14px}
+table.plain{width:100%;border-collapse:collapse;font-size:15px}
+table.plain th,table.plain td{border:1px solid var(--border);padding:9px 12px;text-align:center}
+table.plain th{background:#F0F6FE;font-size:13.5px}
+table.plain td.cls{font-weight:700;color:#1F8A5D}
+.callout{display:flex;gap:10px;background:var(--soft);border:1px solid var(--border);border-radius:12px;padding:13px 15px;font-size:14px;margin:12px 0}
+.callout.orange{background:var(--orange-soft);border-color:transparent;color:#8F5A1E}
+.callout.blue{background:var(--blue-soft);border-color:transparent;color:#1D5296}
+/* modal */
+.backdrop{position:fixed;inset:0;background:rgba(20,35,60,.42);display:flex;align-items:flex-start;justify-content:center;z-index:60;padding:6vh 16px 16px;overflow:auto}
+.modal{background:var(--canvas);border-radius:20px;width:100%;max-width:500px;padding:26px;box-shadow:0 2px 4px rgba(20,35,60,.06),0 18px 50px rgba(20,35,60,.2)}
+.modal.wide{max-width:880px}
+.modal h2{margin-bottom:2px}
+.modal .meta{color:var(--sub);font-size:14px;margin-bottom:14px}
+.field{margin:13px 0}
+.field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:6px}
+.field input[type=text],.field input[type=password],.field select,.field textarea{width:100%;border:1.5px solid var(--border);border-radius:12px;padding:10px 13px;font-size:15.5px;font-family:inherit;background:var(--canvas);color:var(--text);min-height:44px}
+.field input:focus,.field select:focus,.field textarea:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:var(--blue)}
+.field .hint{font-size:12.5px;color:var(--sub);margin-top:5px}
+.mrow{display:flex;gap:8px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap}
+.err{color:var(--red);font-size:13.5px;margin-top:8px;min-height:18px}
+/* admin slot editor */
+.slot-edit{overflow-x:auto}
+.slot-edit table{border-collapse:collapse;font-size:13px;min-width:660px;width:100%}
+.slot-edit th,.slot-edit td{border:1px solid var(--border);padding:5px 6px;text-align:center}
+.slot-edit th{background:#F0F6FE}
+.pbtn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--canvas);color:var(--sub);font-size:12.5px;margin:1px}
+.pbtn.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
+.so-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.so-row select{border:1.5px solid var(--border);border-radius:12px;padding:8px 10px;font-size:15px;min-height:42px;font-family:inherit;background:#fff;color:var(--text)}
+/* setup */
+.setup-hero{text-align:center;padding:8px 0 4px}
+.setup-hero .ico{font-size:36px}
+ol.steps{margin:8px 0;padding-left:20px;font-size:14px}
+ol.steps li{margin:6px 0}
+code{background:var(--soft2);border-radius:6px;padding:1px 6px;font-family:Menlo,Consolas,monospace;font-size:12.5px}
+textarea.cfg{min-height:110px;font-family:Menlo,Consolas,monospace;font-size:12px}
+details{border:1px solid var(--border);border-radius:12px;padding:11px 15px;margin:10px 0;background:var(--soft)}
+details summary{cursor:pointer;font-weight:700;font-size:14.5px}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1F2B3D;color:#fff;padding:11px 22px;border-radius:999px;font-size:14.5px;z-index:99;opacity:0;transition:opacity .25s;pointer-events:none;max-width:90vw;text-align:center;box-shadow:0 8px 24px rgba(20,35,60,.3)}
+.toast.show{opacity:1}
+@media(max-width:720px){
+  .wrap{padding:12px 14px 44px}
+  header{padding:16px 18px;border-radius:16px}
+  header h1{font-size:19px}
+  .tabs{width:100%;justify-content:space-between}
+  .tabs button{padding:9px 12px;font-size:14px}
+  .modal{padding:20px;border-radius:16px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <h1>🏃 4학년 체육공간 예약</h1>
+      <div class="sub">2026학년도 2학기 특별실 시간표(0619) 기준 · 담임 사용 가능 시간</div>
+    </div>
+    <div class="head-right">
+      <span id="connBadge" class="badge">연결 확인 중…</span>
+      <span id="adminBadge" class="badge admin" style="display:none">관리자 모드</span>
+      <button class="btn small" id="adminBtn">관리자</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs">
+    <button data-tab="week" class="active">주간 예약</button>
+    <button data-tab="so">소강당 고정표</button>
+    <button data-tab="help">이용 안내</button>
+  </nav>
+
+  <section id="tab-week">
+    <div class="week-nav">
+      <button class="btn small" id="prevW" aria-label="이전 주">◀</button>
+      <span class="label" id="weekLabel"></span>
+      <span class="parity-chip" id="parityChip"></span>
+      <button class="btn small" id="nextW" aria-label="다음 주">▶</button>
+      <button class="btn small" id="todayW">오늘</button>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="border:1.5px dashed #9CC4EA;background:#fff"></span>예약 가능 (누르면 예약)</span>
+      <span><span class="dot" style="background:var(--blue-soft)"></span>예약됨 (누르면 수정·삭제)</span>
+      <span><span class="dot" style="background:var(--green-soft)"></span>소강당 고정 배정</span>
+      <span>☔ 우천 시 방과후와 겹칠 수 있음</span>
+    </div>
+    <div class="grid-wrap"><table class="grid" id="weekGrid"></table></div>
+  </section>
+
+  <section id="tab-so" style="display:none">
+    <div class="card">
+      <h2>소강당 고정 배정표</h2>
+      <p class="note">홀수달·짝수달 관계없이 매주 동일하게 사용하는 10개 시간입니다. 수정은 관리자 모드에서 할 수 있습니다.</p>
+      <div id="soTable"></div>
+      <div class="mrow" style="justify-content:flex-start"><button class="btn" id="soEditBtn">✏️ 배정 수정 (관리자)</button></div>
+    </div>
+  </section>
+
+  <section id="tab-help" style="display:none">
+    <div class="card">
+      <h2>이용 안내</h2>
+      <h3>1. 예약하기</h3>
+      <p class="note">주간 예약 탭에서 원하는 날짜의 <b>파란 점선 칸</b>을 누르고, 우리 반 코드를 입력하면 예약됩니다. 한 칸에는 한 반만 예약할 수 있으며 선착순입니다.</p>
+      <h3>2. 반 코드</h3>
+      <p class="note">1반=<code>41</code>, 2반=<code>42</code> … 9반=<code>49</code>, 10반=<code>410</code>. 예약할 때 입력한 반 코드를 다시 입력하면 내 예약을 수정·삭제할 수 있습니다.</p>
+      <h3>3. 담임 사용 가능 시간 (시간표의 ‘4’ 칸)</h3>
+      <div style="overflow-x:auto">
+      <table class="plain" style="min-width:560px">
+        <tr><th>공간</th><th>홀수달 (3·5·7·9·11·1월)</th><th>짝수달 (4·6·8·10·12월)</th></tr>
+        <tr><td>강당A</td><td>금 4교시 · 목 5교시 · 금 5교시☔</td><td>금 5교시☔ · 수 6교시</td></tr>
+        <tr><td>강당B</td><td>금 4교시 · 수·목·금 5교시 · 수 6교시</td><td>수·목·금 5교시 · 수 6교시</td></tr>
+        <tr><td>소강당</td><td colspan="2">고정 배정 10개 시간 (월~금 4교시 / 월~목 5교시 / 화 6교시)</td></tr>
+        <tr><td>운동장A</td><td>수 6교시</td><td>금 4교시 · 목 5교시</td></tr>
+        <tr><td>운동장B</td><td>수·목 5교시</td><td>금 4교시 · 수·목 5교시</td></tr>
+      </table>
+      </div>
+      <p class="note" style="margin-top:8px">☔ 강당A 금 5교시는 시간표에 ‘우천 시 방과후’ 표기가 있어, 비 오는 날에는 방과후 수업과 겹칠 수 있습니다.</p>
+      <h3>4. 관리자</h3>
+      <p class="note">관리자 코드를 입력하면 소강당 고정 배정 수정, 예약 가능 시간표 수정, 모든 예약 삭제, 관리자 코드 변경을 할 수 있습니다.</p>
+      <div class="callout blue">💡 시간표가 학교 사정으로 바뀌면, 관리자 모드의 <b>‘예약 가능 시간 편집’</b>에서 언제든지 칸을 다시 지정할 수 있습니다.</div>
+    </div>
+  </section>
+</div>
+
+<div id="modalHost"></div>
+<div id="setupHost"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   Firebase 설정 (실시간 공유용)
+   - 아래 null 자리에 Firebase 콘솔에서 복사한 firebaseConfig 객체를 붙여넣고
+     파일을 저장하면, 이 파일을 받는 모든 선생님이 바로 함께 쓸 수 있습니다.
+   - 예: const EMBEDDED_CONFIG = { apiKey:"...", databaseURL:"...", ... };
+===================================================================== */
+const EMBEDDED_CONFIG = {
+  apiKey: "AIzaSyBawzqhFXW5nyJK1H7iVyHTmV76Z_Aw7uM",
+  authDomain: "reservation-gym4.firebaseapp.com",
+  databaseURL: "https://reservation-gym4-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "reservation-gym4",
+  storageBucket: "reservation-gym4.firebasestorage.app",
+  messagingSenderId: "107995615856",
+  appId: "1:107995615856:web:dd50227215c14e67c11ab5"
+};
+
+const LS_CFG="gym4.fbConfig", LS_DEMO="gym4.demoData", SS_ADMIN="gym4.admin";
+const DAYS=["월","화","수","목","금"];
+const PERIOD_TIME={1:"09:00~09:40",2:"09:50~10:30",3:"10:40~11:20",4:"11:20~12:10",5:"13:00~13:40",6:"13:50~14:30"};
+const SPACES={gangA:"강당A",gangB:"강당B",so:"소강당",playA:"운동장A",playB:"운동장B"};
+const BOOKABLE=["gangA","gangB","playA","playB"];
+const RAIN={gangA:["4-5"]};
+const DEFAULT_SETTINGS={
+  adminCode:"4444",
+  slots:{
+    odd:{gangA:["4-4","3-5","4-5"],gangB:["4-4","2-5","3-5","4-5","2-6"],playA:["2-6"],playB:["2-5","3-5"]},
+    even:{gangA:["4-5","2-6"],gangB:["2-5","3-5","4-5","2-6"],playA:["4-4","3-5"],playB:["4-4","2-5","3-5"]}
+  },
+  so:[{d:0,p:4,c:1},{d:1,p:4,c:2},{d:2,p:4,c:3},{d:3,p:4,c:4},{d:4,p:4,c:5},
+      {d:0,p:5,c:6},{d:1,p:5,c:7},{d:2,p:5,c:8},{d:3,p:5,c:9},{d:1,p:6,c:10}]
+};
+
+/* ---------- 저장소 ---------- */
+let memFallback={};
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return memFallback[k]||null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){memFallback[k]=v}}
+
+class LocalStore{
+  constructor(){this.key=LS_DEMO;this.onData=null}
+  init(onData){this.onData=onData;onData(this._load());
+    window.addEventListener("storage",e=>{if(e.key===this.key)onData(this._load())})}
+  _load(){try{return JSON.parse(lsGet(this.key))||{}}catch(e){return{}}}
+  _save(d){lsSet(this.key,JSON.stringify(d));this.onData(d)}
+  async reserve(k,obj){const d=this._load();d.res=d.res||{};if(d.res[k])return{ok:false};d.res[k]=obj;this._save(d);return{ok:true}}
+  async update(k,obj){const d=this._load();d.res=d.res||{};d.res[k]=obj;this._save(d)}
+  async remove(k){const d=this._load();if(d.res)delete d.res[k];this._save(d)}
+  async saveSettings(part){const d=this._load();d.settings=Object.assign({},d.settings,part);this._save(d)}
+}
+class FireStore{
+  constructor(cfg){firebase.initializeApp(cfg);this.root=firebase.database().ref("gym4")}
+  init(onData){this.root.on("value",s=>onData(s.val()||{}),err=>{showToast("Firebase 연결 오류: "+err.message)})}
+  async reserve(k,obj){const r=await this.root.child("res/"+k).transaction(c=>c===null?obj:undefined);return{ok:r.committed}}
+  async update(k,obj){await this.root.child("res/"+k).set(obj)}
+  async remove(k){await this.root.child("res/"+k).remove()}
+  async saveSettings(part){await this.root.child("settings").update(part)}
+}
+
+/* ---------- 상태 ---------- */
+let store=null, demoMode=false, connFailed=false;
+let state={settings:null,res:{}};
+function S(){const s=state.settings||{};return{
+  adminCode:s.adminCode||DEFAULT_SETTINGS.adminCode,
+  slots:s.slots?normSlots(s.slots):DEFAULT_SETTINGS.slots,
+  so:Array.isArray(s.so)&&s.so.length?s.so:DEFAULT_SETTINGS.so};}
+function normSlots(sl){const out={odd:{},even:{}};["odd","even"].forEach(par=>{BOOKABLE.forEach(sp=>{const v=(sl[par]||{})[sp];out[par][sp]=Array.isArray(v)?v:[]})});return out}
+let isAdmin=false;try{isAdmin=sessionStorage.getItem(SS_ADMIN)==="1"}catch(e){}
+
+/* ---------- 날짜 도우미 ---------- */
+function getMonday(d){const x=new Date(d.getFullYear(),d.getMonth(),d.getDate());const wd=(x.getDay()+6)%7;
+  if(wd>=5){x.setDate(x.getDate()+(7-wd))}else{x.setDate(x.getDate()-wd)}return x}
+function addDays(d,n){const x=new Date(d);x.setDate(x.getDate()+n);return x}
+function fmt(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function parity(d){return (d.getMonth()+1)%2===1?"odd":"even"}
+const todayStr=fmt(new Date());
+let weekStart=getMonday(new Date());
+
+/* ---------- 공통 UI ---------- */
+function el(id){return document.getElementById(id)}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+let toastTimer=null;
+function showToast(msg){const t=el("toast");t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2600)}
+function closeModal(){el("modalHost").innerHTML=""}
+function openModal(html,wide){el("modalHost").innerHTML='<div class="backdrop" id="bd"><div class="modal'+(wide?" wide":"")+'" role="dialog">'+html+"</div></div>";
+  el("bd").addEventListener("click",e=>{if(e.target.id==="bd")closeModal()})}
+function codeToCls(code){const m=/^4(10|[1-9])$/.exec(String(code).trim());return m?parseInt(m[1],10):null}
+
+/* ---------- 렌더링 ---------- */
+function renderAll(){renderBadges();renderWeek();renderSo()}
+function renderBadges(){
+  const b=el("connBadge");
+  if(connFailed){b.className="badge demo";b.textContent="연결 실패 · 인터넷 확인 후 새로고침"}
+  else if(demoMode){b.className="badge demo";b.textContent="체험 모드 · 이 기기에만 저장"}
+  else{b.className="badge on";b.textContent="실시간 공유 중"}
+  el("adminBadge").style.display=isAdmin?"":"none";
+  el("adminBtn").textContent=isAdmin?"관리자 설정":"관리자";
+}
+function weekDates(){return [0,1,2,3,4].map(i=>addDays(weekStart,i))}
+function renderWeek(){
+  const ds=weekDates(),st=S();
+  const first=ds[0],last=ds[4];
+  el("weekLabel").textContent=first.getFullYear()+"년 "+(first.getMonth()+1)+"월 "+first.getDate()+"일 ~ "+((last.getMonth()!==first.getMonth())?(last.getMonth()+1)+"월 ":"")+last.getDate()+"일";
+  const pars=[...new Set(ds.map(parity))];
+  el("parityChip").textContent=pars.length===1?(pars[0]==="odd"?"홀수달 시간표 적용":"짝수달 시간표 적용"):"홀·짝수달 혼합 주간";
+  // 표시할 교시: 소강당 고정 + 예약 슬롯에 등장하는 교시
+  const pset=new Set();
+  st.so.forEach(x=>pset.add(Number(x.p)));
+  pars.forEach(par=>BOOKABLE.forEach(sp=>(st.slots[par][sp]||[]).forEach(s=>pset.add(parseInt(s.split("-")[1],10)))));
+  const periods=[...pset].sort((a,b)=>a-b);
+  let html="<thead><tr><th style='width:86px'>교시</th>";
+  ds.forEach((d,i)=>{const isToday=fmt(d)===todayStr;
+    html+="<th"+(isToday?" class='today-col'":"")+"><span class='d'>"+DAYS[i]+" "+(d.getMonth()+1)+"/"+d.getDate()+"</span><span class='pt'>"+(parity(d)==="odd"?"홀":"짝")+"</span>"+(isToday?" <span class='pt'>오늘</span>":"")+"</th>"});
+  html+="</tr></thead><tbody>";
+  periods.forEach(p=>{
+    html+="<tr><td class='plabel'>"+p+"교시<span class='t'>"+(PERIOD_TIME[p]||"")+"</span></td>";
+    ds.forEach((d,i)=>{
+      const dstr=fmt(d),par=parity(d),past=dstr<todayStr;
+      let cell="";
+      st.so.forEach(x=>{if(Number(x.d)===i&&Number(x.p)===p){
+        cell+="<div class='chip fixed"+(past?" past":"")+"' title='소강당 고정 배정'><span>소강당</span><span class='who'>"+esc(x.c)+"반</span></div>"}});
+      BOOKABLE.forEach(sp=>{
+        if((st.slots[par][sp]||[]).includes(i+"-"+p)){
+          const key=dstr+"_"+sp+"_"+p, r=state.res&&state.res[key];
+          const rain=(RAIN[sp]||[]).includes(i+"-"+p)?" <span class='rain' title='우천 시 방과후와 겹칠 수 있음'>☔</span>":"";
+          if(r){cell+="<button class='chip resv"+(past?" past":"")+"' data-act='manage' data-key='"+key+"'><span>"+SPACES[sp]+rain+"</span><span class='who'>"+esc(r.c)+"반</span></button>"}
+          else if(past){cell+="<div class='chip avail past'><span>"+SPACES[sp]+"</span><span>－</span></div>"}
+          else{cell+="<button class='chip avail' data-act='book' data-key='"+key+"'><span>"+SPACES[sp]+rain+"</span><span>＋</span></button>"}
+        }});
+      if(!cell)cell="<div class='empty-cell'>－</div>";
+      html+="<td>"+cell+"</td>";
+    });
+    html+="</tr>";
+  });
+  html+="</tbody>";
+  el("weekGrid").innerHTML=html;
+}
+function soSorted(){return [...S().so].sort((a,b)=>(a.p-b.p)||(a.d-b.d))}
+function renderSo(){
+  let html="<div style='overflow-x:auto'><table class='plain' style='min-width:420px'><tr><th>구분</th><th>요일</th><th>교시</th><th>시간</th><th>배정 반</th></tr>";
+  soSorted().forEach((x,n)=>{html+="<tr><td>"+(n+1)+"</td><td>"+DAYS[x.d]+"</td><td>"+x.p+"교시</td><td>"+(PERIOD_TIME[x.p]||"")+"</td><td class='cls'>"+esc(x.c)+"반</td></tr>"});
+  html+="</table></div>";
+  el("soTable").innerHTML=html;
+}
+
+/* ---------- 예약/관리 모달 ---------- */
+function keyInfo(key){const[dstr,sp,p]=key.split("_");const d=new Date(dstr+"T00:00:00");
+  return{dstr,sp,p:Number(p),label:(d.getMonth()+1)+"월 "+d.getDate()+"일 ("+DAYS[(d.getDay()+6)%7]+") "+p+"교시 · "+SPACES[sp]+" · "+(PERIOD_TIME[p]||"")}}
+function openBook(key){
+  const k=keyInfo(key);
+  openModal("<h2>"+SPACES[k.sp]+" 예약</h2><div class='meta'>"+k.label+"</div>"+
+    "<div class='field'><label for='bkCode'>반 코드</label><input id='bkCode' type='text' inputmode='numeric' placeholder='예: 1반=41, 10반=410' autocomplete='off'><div class='hint'>입력한 반 코드로 예약되며, 수정·삭제할 때 같은 코드가 필요합니다.</div></div>"+
+    "<div class='field'><label for='bkMemo'>메모 (선택)</label><input id='bkMemo' type='text' placeholder='예: 티볼 수업' maxlength='30'></div>"+
+    "<div class='err' id='bkErr'></div>"+
+    "<div class='mrow'><button class='btn' onclick='closeModal()'>취소</button><button class='btn primary' id='bkGo'>예약하기</button></div>");
+  el("bkCode").focus();
+  el("bkGo").addEventListener("click",async()=>{
+    const cls=codeToCls(el("bkCode").value);
+    if(!cls){el("bkErr").textContent="반 코드가 올바르지 않습니다. (41 ~ 410)";return}
+    const r=await store.reserve(key,{c:cls,m:el("bkMemo").value.trim(),t:Date.now()});
+    if(r.ok){closeModal();showToast(cls+"반 예약 완료!")}
+    else{el("bkErr").textContent="앗, 방금 다른 반이 먼저 예약했습니다."}
+  });
+  el("bkCode").addEventListener("keydown",e=>{if(e.key==="Enter")el("bkGo").click()});
+}
+function openManage(key){
+  const k=keyInfo(key), r=state.res[key];
+  if(!r)return;
+  openModal("<h2>"+SPACES[k.sp]+" · "+esc(r.c)+"반 예약</h2><div class='meta'>"+k.label+(r.m?" · 메모: "+esc(r.m):"")+"</div>"+
+    (isAdmin?"<div class='callout blue'>관리자 모드: 코드 없이 수정·삭제할 수 있습니다.</div>":
+    "<div class='field'><label for='mgCode'>반 코드 확인</label><input id='mgCode' type='text' inputmode='numeric' placeholder='"+esc(r.c)+"반 코드 입력' autocomplete='off'><div class='hint'>예약한 반의 코드(또는 관리자 코드)를 입력하세요.</div></div>")+
+    "<div class='field'><label for='mgMemo'>메모</label><input id='mgMemo' type='text' value='"+esc(r.m||"")+"' maxlength='30'></div>"+
+    "<div class='err' id='mgErr'></div>"+
+    "<div class='mrow'><button class='btn' onclick='closeModal()'>닫기</button><button class='btn danger' id='mgDel'>예약 삭제</button><button class='btn primary' id='mgSave'>메모 저장</button></div>");
+  function authed(){
+    if(isAdmin)return true;
+    const v=el("mgCode").value.trim();
+    if(v===S().adminCode)return true;
+    if(codeToCls(v)===Number(r.c))return true;
+    el("mgErr").textContent="코드가 일치하지 않습니다.";return false}
+  el("mgDel").addEventListener("click",async()=>{if(!authed())return;await store.remove(key);closeModal();showToast("예약이 삭제되었습니다.")});
+  el("mgSave").addEventListener("click",async()=>{if(!authed())return;await store.update(key,Object.assign({},r,{m:el("mgMemo").value.trim()}));closeModal();showToast("메모를 저장했습니다.")});
+}
+
+/* ---------- 관리자 ---------- */
+function openAdminLogin(){
+  openModal("<h2>관리자 확인</h2><div class='meta'>관리자 코드를 입력하세요. (처음 코드: 4444)</div>"+
+    "<div class='field'><input id='adCode' type='password' autocomplete='off' placeholder='관리자 코드'></div><div class='err' id='adErr'></div>"+
+    "<div class='mrow'><button class='btn' onclick='closeModal()'>취소</button><button class='btn primary' id='adGo'>확인</button></div>");
+  el("adCode").focus();
+  const go=()=>{if(el("adCode").value.trim()===S().adminCode){isAdmin=true;try{sessionStorage.setItem(SS_ADMIN,"1")}catch(e){};closeModal();renderAll();openAdminPanel()}else el("adErr").textContent="코드가 일치하지 않습니다."};
+  el("adGo").addEventListener("click",go);
+  el("adCode").addEventListener("keydown",e=>{if(e.key==="Enter")go()});
+}
+function openAdminPanel(){
+  const st=S();
+  let soRows="";
+  st.so.forEach((x,n)=>{
+    soRows+="<div class='so-row' data-n='"+n+"'><select class='so-d'>"+DAYS.map((d,i)=>"<option value='"+i+"'"+(i===Number(x.d)?" selected":"")+">"+d+"요일</option>").join("")+"</select>"+
+      "<select class='so-p'>"+[1,2,3,4,5,6].map(p=>"<option value='"+p+"'"+(p===Number(x.p)?" selected":"")+">"+p+"교시</option>").join("")+"</select>"+
+      "<select class='so-c'>"+Array.from({length:10},(_,i)=>i+1).map(c=>"<option value='"+c+"'"+(c===Number(x.c)?" selected":"")+">"+c+"반</option>").join("")+"</select></div>"});
+  function slotTable(par){
+    let h="<table><tr><th style='min-width:70px'>공간</th>"+DAYS.map(d=>"<th>"+d+"</th>").join("")+"</tr>";
+    BOOKABLE.forEach(sp=>{h+="<tr><th>"+SPACES[sp]+"</th>";
+      DAYS.forEach((_,di)=>{h+="<td>";
+        [1,2,3,4,5,6].forEach(p=>{const on=(st.slots[par][sp]||[]).includes(di+"-"+p);
+          h+="<button class='pbtn"+(on?" on":"")+"' data-par='"+par+"' data-sp='"+sp+"' data-dp='"+di+"-"+p+"' title='"+p+"교시'>"+p+"</button>"});
+        h+="</td>"});
+      h+="</tr>"});
+    return h+"</table>"}
+  openModal("<h2>⚙️ 관리자 설정</h2><div class='meta'>변경 후 아래 ‘저장’을 눌러야 모두에게 반영됩니다.</div>"+
+    "<h3>1. 소강당 고정 배정 (10개)</h3><div id='soEdit'>"+soRows+"</div><div class='hint' id='soWarn' style='color:var(--orange);font-size:12.5px'></div>"+
+    "<h3>2. 예약 가능 시간 편집 <span style='font-weight:400;font-size:12.5px;color:var(--sub)'>(숫자 = 교시, 파란색 = 예약 가능)</span></h3>"+
+    "<p class='note' style='margin:2px 0 6px'><b>홀수달</b> (3·5·7·9·11·1월)</p><div class='slot-edit'>"+slotTable("odd")+"</div>"+
+    "<p class='note' style='margin:10px 0 6px'><b>짝수달</b> (4·6·8·10·12월)</p><div class='slot-edit'>"+slotTable("even")+"</div>"+
+    "<h3>3. 관리자 코드 변경</h3><div class='field'><input id='newAdCode' type='text' placeholder='새 관리자 코드 (비우면 유지)' autocomplete='off'></div>"+
+    "<div class='mrow'><button class='btn' id='adLogout'>관리자 모드 종료</button><button class='btn' onclick='closeModal()'>취소</button><button class='btn primary' id='adSave'>저장</button></div>",true);
+  const edited=JSON.parse(JSON.stringify(st.slots));
+  document.querySelectorAll(".pbtn").forEach(b=>b.addEventListener("click",()=>{
+    const{par,sp,dp}=b.dataset;const arr=edited[par][sp]=edited[par][sp]||[];
+    const ix=arr.indexOf(dp);if(ix>=0){arr.splice(ix,1);b.classList.remove("on")}else{arr.push(dp);b.classList.add("on")}}));
+  function checkWarn(){const cs=[...document.querySelectorAll(".so-c")].map(s=>s.value);
+    const missing=Array.from({length:10},(_,i)=>String(i+1)).filter(c=>!cs.includes(c));
+    el("soWarn").textContent=missing.length?"⚠️ 배정에서 빠진 반: "+missing.join(", ")+"반":""}
+  document.querySelectorAll("#soEdit select").forEach(s=>s.addEventListener("change",checkWarn));checkWarn();
+  el("adLogout").addEventListener("click",()=>{isAdmin=false;try{sessionStorage.removeItem(SS_ADMIN)}catch(e){};closeModal();renderAll();showToast("관리자 모드를 종료했습니다.")});
+  el("adSave").addEventListener("click",async()=>{
+    const so=[...document.querySelectorAll("#soEdit .so-row")].map(row=>({
+      d:Number(row.querySelector(".so-d").value),p:Number(row.querySelector(".so-p").value),c:Number(row.querySelector(".so-c").value)}));
+    const part={so,slots:edited};
+    const nc=el("newAdCode").value.trim();if(nc)part.adminCode=nc;
+    await store.saveSettings(part);closeModal();showToast("저장했습니다. 모두에게 반영됩니다.")});
+}
+
+/* ---------- 초기 설정 화면 ---------- */
+function parseConfig(text){
+  const a=text.indexOf("{"),b=text.lastIndexOf("}");
+  if(a<0||b<0)return null;
+  try{const o=(new Function("return ("+text.slice(a,b+1)+")"))();
+    return (o&&o.apiKey)?o:null}catch(e){return null}
+}
+function showSetup(){
+  el("setupHost").innerHTML='<div class="backdrop"><div class="modal" style="max-width:560px">'+
+  '<div class="setup-hero"><div class="ico">🏃</div><h2>4학년 체육공간 예약 · 처음 설정</h2>'+
+  '<p class="note">여러 선생님이 함께 쓰려면 무료 Firebase 저장소 연결이 필요합니다.<br>혼자 먼저 살펴보려면 체험 모드로 시작하세요.</p></div>'+
+  '<details open><summary>1단계 · Firebase 준비 (약 5분, 최초 1회)</summary><ol class="steps">'+
+  '<li><code>console.firebase.google.com</code> 접속 → 구글 로그인 → <b>프로젝트 만들기</b> (이름 예: gym4)</li>'+
+  '<li>왼쪽 메뉴 <b>빌드 → Realtime Database → 데이터베이스 만들기</b> → 위치는 그대로 → <b>테스트 모드</b> 선택</li>'+
+  '<li><b>규칙</b> 탭에서 <code>".read": true, ".write": true</code> 로 바꾸고 게시 (테스트 모드 규칙은 30일 뒤 만료되므로 이렇게 바꿔두세요)</li>'+
+  '<li>⚙️ <b>프로젝트 설정 → 일반 → 내 앱 → 웹(&lt;/&gt;) 앱 등록</b> → 나오는 <code>firebaseConfig = { ... }</code> 부분 복사</li>'+
+  '</ol></details>'+
+  '<div class="field"><label for="cfgText">2단계 · 복사한 firebaseConfig 붙여넣기</label>'+
+  '<textarea id="cfgText" class="cfg" placeholder="const firebaseConfig = { apiKey: ... };  ← 통째로 붙여넣어도 됩니다"></textarea>'+
+  '<div class="hint">붙여넣은 설정은 이 컴퓨터에 저장됩니다. 다른 선생님도 같은 설정을 붙여넣으면 함께 사용됩니다. (파일을 메모장으로 열어 EMBEDDED_CONFIG 자리에 붙여넣어 저장하면, 파일만 공유해도 바로 연결됩니다.)</div></div>'+
+  '<div class="err" id="cfgErr"></div>'+
+  '<div class="mrow" style="justify-content:space-between"><button class="btn" id="demoGo">체험 모드로 시작</button><button class="btn primary" id="cfgGo">연결하기</button></div>'+
+  '</div></div>';
+  el("demoGo").addEventListener("click",()=>{el("setupHost").innerHTML="";startDemo()});
+  el("cfgGo").addEventListener("click",()=>{
+    const cfg=parseConfig(el("cfgText").value);
+    if(!cfg){el("cfgErr").textContent="설정을 읽을 수 없습니다. firebaseConfig = { ... } 부분을 통째로 붙여넣어 주세요.";return}
+    lsSet(LS_CFG,JSON.stringify(cfg));el("setupHost").innerHTML="";startFirebase(cfg)});
+}
+
+/* ---------- 시작 ---------- */
+function onData(d){state={settings:(d&&d.settings)||null,res:(d&&d.res)||{}};renderAll()}
+function startDemo(){
+  demoMode=true;store=new LocalStore();
+  const cur=store._load();
+  if(!cur.res||Object.keys(cur.res).length===0){ // 체험용 예시 데이터
+    cur.res=cur.res||{};
+    const ds=weekDates(),st=DEFAULT_SETTINGS;let seeded=0;
+    outer:for(const d of ds){const par=parity(d),di=(d.getDay()+6)%7;
+      for(const sp of BOOKABLE){for(const s of (st.slots[par][sp]||[])){
+        const[sd,sp2]=s.split("-");
+        if(Number(sd)===di&&fmt(d)>=todayStr){
+          cur.res[fmt(d)+"_"+sp+"_"+sp2]={c:seeded===0?3:7,m:seeded===0?"티볼":"",t:Date.now()};
+          if(++seeded>=2)break outer}}}}
+    lsSet(LS_DEMO,JSON.stringify(cur));
+  }
+  store.init(onData);
+}
+function loadScript(src){return new Promise((ok,no)=>{const s=document.createElement("script");s.src=src;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+async function startFirebase(cfg){
+  try{
+    await loadScript("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js");
+    await loadScript("https://www.gstatic.com/firebasejs/10.14.1/firebase-database-compat.js");
+    store=new FireStore(cfg);store.init(onData);
+  }catch(e){connFailed=true;renderAll();showToast("Firebase 불러오기 실패 — 인터넷 연결을 확인하세요.");showSetup()}
+}
+function init(){
+  const hash=location.hash||"";
+  const forceDemo=hash.includes("demo");
+  let cfg=EMBEDDED_CONFIG;
+  if(!cfg){try{cfg=JSON.parse(lsGet(LS_CFG))}catch(e){cfg=null}}
+  if(forceDemo){startDemo()}
+  else if(cfg){startFirebase(cfg)}
+  else{demoMode=true;store=new LocalStore();store.init(onData);showSetup()}
+  // 탭
+  el("tabs").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;
+    document.querySelectorAll("#tabs button").forEach(x=>x.classList.toggle("active",x===b));
+    ["week","so","help"].forEach(t=>el("tab-"+t).style.display=(b.dataset.tab===t)?"":"none")});
+  el("prevW").addEventListener("click",()=>{weekStart=addDays(weekStart,-7);renderWeek()});
+  el("nextW").addEventListener("click",()=>{weekStart=addDays(weekStart,7);renderWeek()});
+  el("todayW").addEventListener("click",()=>{weekStart=getMonday(new Date());renderWeek()});
+  el("weekGrid").addEventListener("click",e=>{const b=e.target.closest("button[data-act]");if(!b)return;
+    if(b.dataset.act==="book")openBook(b.dataset.key);else openManage(b.dataset.key)});
+  el("adminBtn").addEventListener("click",()=>{isAdmin?openAdminPanel():openAdminLogin()});
+  el("soEditBtn").addEventListener("click",()=>{isAdmin?openAdminPanel():openAdminLogin()});
+  renderAll();
+  // 화면 테스트용 훅
+  if(hash.includes("view=so"))document.querySelector("[data-tab=so]").click();
+  if(hash.includes("view=help"))document.querySelector("[data-tab=help]").click();
+  if(hash.includes("view=admin")&&forceDemo){isAdmin=true;renderAll();openAdminPanel()}
+  if(hash.includes("view=modal")&&forceDemo){const b=document.querySelector("button[data-act=book]");if(b)openBook(b.dataset.key)}
+  if(hash.includes("view=setup"))showSetup();
+}
+init();
+</script>
+</body>
+</html>
