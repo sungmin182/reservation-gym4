@@ -99,7 +99,7 @@ table.plain td.cls{font-weight:700;color:#1F8A5D}
 .slot-edit th{background:#F0F6FE}
 .pbtn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:var(--canvas);color:var(--sub);font-size:12.5px;margin:1px}
 .pbtn.on{background:var(--blue);border-color:var(--blue);color:#fff;font-weight:700}
-.so-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px}
+.so-row{display:grid;grid-template-columns:1.1fr 1fr 1fr .9fr;gap:8px;margin-bottom:8px}
 .so-row select{border:1.5px solid var(--border);border-radius:12px;padding:8px 10px;font-size:15px;min-height:42px;font-family:inherit;background:#fff;color:var(--text)}
 /* setup */
 .setup-hero{text-align:center;padding:8px 0 4px}
@@ -138,7 +138,7 @@ details summary{cursor:pointer;font-weight:700;font-size:14.5px}
 
   <nav class="tabs" id="tabs">
     <button data-tab="week" class="active">주간 예약</button>
-    <button data-tab="so">소강당 고정표</button>
+    <button data-tab="so">고정 배정표</button>
     <button data-tab="help">이용 안내</button>
   </nav>
 
@@ -153,7 +153,7 @@ details summary{cursor:pointer;font-weight:700;font-size:14.5px}
     <div class="legend">
       <span><span class="dot" style="border:1.5px dashed #9CC4EA;background:#fff"></span>예약 가능 (누르면 예약)</span>
       <span><span class="dot" style="background:var(--blue-soft)"></span>예약됨 (누르면 수정·삭제)</span>
-      <span><span class="dot" style="background:var(--green-soft)"></span>소강당 고정 배정</span>
+      <span><span class="dot" style="background:var(--green-soft)"></span>고정 배정 (매주 동일)</span>
       <span>☔ 우천 시 방과후와 겹칠 수 있음</span>
     </div>
     <div class="grid-wrap"><table class="grid" id="weekGrid"></table></div>
@@ -161,8 +161,8 @@ details summary{cursor:pointer;font-weight:700;font-size:14.5px}
 
   <section id="tab-so" style="display:none">
     <div class="card">
-      <h2>소강당 고정 배정표</h2>
-      <p class="note">홀수달·짝수달 관계없이 매주 동일하게 사용하는 10개 시간입니다. 수정은 관리자 모드에서 할 수 있습니다.</p>
+      <h2>고정 배정표</h2>
+      <p class="note">홀수달·짝수달 관계없이 매주 동일하게 사용하는 고정 시간 10개입니다. (강당A·강당B 각 1개, 소강당 8개) 수정은 관리자 모드에서 할 수 있습니다.</p>
       <div id="soTable"></div>
       <div class="mrow" style="justify-content:flex-start"><button class="btn" id="soEditBtn">✏️ 배정 수정 (관리자)</button></div>
     </div>
@@ -179,16 +179,16 @@ details summary{cursor:pointer;font-weight:700;font-size:14.5px}
       <div style="overflow-x:auto">
       <table class="plain" style="min-width:560px">
         <tr><th>공간</th><th>홀수달 (3·5·7·9·11·1월)</th><th>짝수달 (4·6·8·10·12월)</th></tr>
-        <tr><td>강당A</td><td>금 4교시 · 목 5교시 · 금 5교시☔</td><td>금 5교시☔ · 수 6교시</td></tr>
-        <tr><td>강당B</td><td>금 4교시 · 수·목·금 5교시 · 수 6교시</td><td>수·목·금 5교시 · 수 6교시</td></tr>
-        <tr><td>소강당</td><td colspan="2">고정 배정 10개 시간 (월~금 4교시 / 월~목 5교시 / 화 6교시)</td></tr>
+        <tr><td>강당A</td><td>금 4교시 · 목 5교시</td><td>수 6교시</td></tr>
+        <tr><td>강당B</td><td>금 4교시 · 목·금 5교시 · 수 6교시</td><td>목·금 5교시 · 수 6교시</td></tr>
+        <tr><td>소강당</td><td colspan="2">목 4·5교시 예약 가능 (나머지 8개 시간은 고정 배정)</td></tr>
         <tr><td>운동장A</td><td>수 6교시</td><td>금 4교시 · 목 5교시</td></tr>
         <tr><td>운동장B</td><td>수·목 5교시</td><td>금 4교시 · 수·목 5교시</td></tr>
       </table>
       </div>
-      <p class="note" style="margin-top:8px">☔ 강당A 금 5교시는 시간표에 ‘우천 시 방과후’ 표기가 있어, 비 오는 날에는 방과후 수업과 겹칠 수 있습니다.</p>
+      <p class="note" style="margin-top:8px">고정 배정 10개: 강당A 금 5교시☔=1반, 강당B 수 5교시=7반, 소강당 8개 시간(고정 배정표 탭 참고). ☔ 표시는 ‘우천 시 방과후’와 겹칠 수 있는 시간입니다.</p>
       <h3>4. 관리자</h3>
-      <p class="note">관리자 코드를 입력하면 소강당 고정 배정 수정, 예약 가능 시간표 수정, 모든 예약 삭제, 관리자 코드 변경을 할 수 있습니다.</p>
+      <p class="note">관리자 코드를 입력하면 고정 배정 수정, 예약 가능 시간표 수정, 모든 예약 삭제, 관리자 코드 변경을 할 수 있습니다.</p>
       <div class="callout blue">💡 시간표가 학교 사정으로 바뀌면, 관리자 모드의 <b>‘예약 가능 시간 편집’</b>에서 언제든지 칸을 다시 지정할 수 있습니다.</div>
     </div>
   </section>
@@ -220,16 +220,17 @@ const LS_CFG="gym4.fbConfig", LS_DEMO="gym4.demoData", SS_ADMIN="gym4.admin";
 const DAYS=["월","화","수","목","금"];
 const PERIOD_TIME={1:"09:00~09:40",2:"09:50~10:30",3:"10:40~11:20",4:"11:20~12:10",5:"13:00~13:40",6:"13:50~14:30"};
 const SPACES={gangA:"강당A",gangB:"강당B",so:"소강당",playA:"운동장A",playB:"운동장B"};
-const BOOKABLE=["gangA","gangB","playA","playB"];
+const BOOKABLE=["gangA","gangB","so","playA","playB"];
 const RAIN={gangA:["4-5"]};
 const DEFAULT_SETTINGS={
   adminCode:"4444",
   slots:{
-    odd:{gangA:["4-4","3-5","4-5"],gangB:["4-4","2-5","3-5","4-5","2-6"],playA:["2-6"],playB:["2-5","3-5"]},
-    even:{gangA:["4-5","2-6"],gangB:["2-5","3-5","4-5","2-6"],playA:["4-4","3-5"],playB:["4-4","2-5","3-5"]}
+    odd:{gangA:["4-4","3-5"],gangB:["4-4","3-5","4-5","2-6"],so:["3-4","3-5"],playA:["2-6"],playB:["2-5","3-5"]},
+    even:{gangA:["2-6"],gangB:["3-5","4-5","2-6"],so:["3-4","3-5"],playA:["4-4","3-5"],playB:["4-4","2-5","3-5"]}
   },
-  so:[{d:0,p:4,c:1},{d:1,p:4,c:2},{d:2,p:4,c:3},{d:3,p:4,c:4},{d:4,p:4,c:5},
-      {d:0,p:5,c:6},{d:1,p:5,c:7},{d:2,p:5,c:8},{d:3,p:5,c:9},{d:1,p:6,c:10}]
+  fixed:[{sp:"gangA",d:4,p:5,c:1},{sp:"gangB",d:2,p:5,c:7},
+      {sp:"so",d:0,p:4,c:10},{sp:"so",d:0,p:5,c:9},{sp:"so",d:1,p:4,c:2},{sp:"so",d:1,p:5,c:3},
+      {sp:"so",d:1,p:6,c:4},{sp:"so",d:2,p:4,c:6},{sp:"so",d:2,p:5,c:5},{sp:"so",d:4,p:4,c:8}]
 };
 
 /* ---------- 저장소 ---------- */
@@ -260,10 +261,10 @@ class FireStore{
 /* ---------- 상태 ---------- */
 let store=null, demoMode=false, connFailed=false;
 let state={settings:null,res:{}};
-function S(){const s=state.settings||{};return{
+function S(){const s=state.settings||{};const v2=Number(s.v)>=2;return{
   adminCode:s.adminCode||DEFAULT_SETTINGS.adminCode,
-  slots:s.slots?normSlots(s.slots):DEFAULT_SETTINGS.slots,
-  so:Array.isArray(s.so)&&s.so.length?s.so:DEFAULT_SETTINGS.so};}
+  slots:(v2&&s.slots)?normSlots(s.slots):DEFAULT_SETTINGS.slots,
+  fixed:(v2&&Array.isArray(s.fixed)&&s.fixed.length)?s.fixed:DEFAULT_SETTINGS.fixed};}
 function normSlots(sl){const out={odd:{},even:{}};["odd","even"].forEach(par=>{BOOKABLE.forEach(sp=>{const v=(sl[par]||{})[sp];out[par][sp]=Array.isArray(v)?v:[]})});return out}
 let isAdmin=false;try{isAdmin=sessionStorage.getItem(SS_ADMIN)==="1"}catch(e){}
 
@@ -303,9 +304,9 @@ function renderWeek(){
   el("weekLabel").textContent=first.getFullYear()+"년 "+(first.getMonth()+1)+"월 "+first.getDate()+"일 ~ "+((last.getMonth()!==first.getMonth())?(last.getMonth()+1)+"월 ":"")+last.getDate()+"일";
   const pars=[...new Set(ds.map(parity))];
   el("parityChip").textContent=pars.length===1?(pars[0]==="odd"?"홀수달 시간표 적용":"짝수달 시간표 적용"):"홀·짝수달 혼합 주간";
-  // 표시할 교시: 소강당 고정 + 예약 슬롯에 등장하는 교시
+  // 표시할 교시: 고정 배정 + 예약 슬롯에 등장하는 교시
   const pset=new Set();
-  st.so.forEach(x=>pset.add(Number(x.p)));
+  st.fixed.forEach(x=>pset.add(Number(x.p)));
   pars.forEach(par=>BOOKABLE.forEach(sp=>(st.slots[par][sp]||[]).forEach(s=>pset.add(parseInt(s.split("-")[1],10)))));
   const periods=[...pset].sort((a,b)=>a-b);
   let html="<thead><tr><th style='width:86px'>교시</th>";
@@ -317,8 +318,9 @@ function renderWeek(){
     ds.forEach((d,i)=>{
       const dstr=fmt(d),par=parity(d),past=dstr<todayStr;
       let cell="";
-      st.so.forEach(x=>{if(Number(x.d)===i&&Number(x.p)===p){
-        cell+="<div class='chip fixed"+(past?" past":"")+"' title='소강당 고정 배정'><span>소강당</span><span class='who'>"+esc(x.c)+"반</span></div>"}});
+      st.fixed.forEach(x=>{if(Number(x.d)===i&&Number(x.p)===p){
+        const frain=(RAIN[x.sp]||[]).includes(i+"-"+p)?" <span class='rain' title='우천 시 방과후와 겹칠 수 있음'>☔</span>":"";
+        cell+="<div class='chip fixed"+(past?" past":"")+"' title='고정 배정'><span>"+SPACES[x.sp||"so"]+frain+"</span><span class='who'>"+esc(x.c)+"반</span></div>"}});
       BOOKABLE.forEach(sp=>{
         if((st.slots[par][sp]||[]).includes(i+"-"+p)){
           const key=dstr+"_"+sp+"_"+p, r=state.res&&state.res[key];
@@ -335,10 +337,10 @@ function renderWeek(){
   html+="</tbody>";
   el("weekGrid").innerHTML=html;
 }
-function soSorted(){return [...S().so].sort((a,b)=>(a.p-b.p)||(a.d-b.d))}
+function soSorted(){return [...S().fixed].sort((a,b)=>(a.p-b.p)||(a.d-b.d))}
 function renderSo(){
-  let html="<div style='overflow-x:auto'><table class='plain' style='min-width:420px'><tr><th>구분</th><th>요일</th><th>교시</th><th>시간</th><th>배정 반</th></tr>";
-  soSorted().forEach((x,n)=>{html+="<tr><td>"+(n+1)+"</td><td>"+DAYS[x.d]+"</td><td>"+x.p+"교시</td><td>"+(PERIOD_TIME[x.p]||"")+"</td><td class='cls'>"+esc(x.c)+"반</td></tr>"});
+  let html="<div style='overflow-x:auto'><table class='plain' style='min-width:500px'><tr><th>구분</th><th>공간</th><th>요일</th><th>교시</th><th>시간</th><th>배정 반</th></tr>";
+  soSorted().forEach((x,n)=>{html+="<tr><td>"+(n+1)+"</td><td>"+SPACES[x.sp||"so"]+"</td><td>"+DAYS[x.d]+"</td><td>"+x.p+"교시</td><td>"+(PERIOD_TIME[x.p]||"")+"</td><td class='cls'>"+esc(x.c)+"반</td></tr>"});
   html+="</table></div>";
   el("soTable").innerHTML=html;
 }
@@ -395,8 +397,9 @@ function openAdminLogin(){
 function openAdminPanel(){
   const st=S();
   let soRows="";
-  st.so.forEach((x,n)=>{
-    soRows+="<div class='so-row' data-n='"+n+"'><select class='so-d'>"+DAYS.map((d,i)=>"<option value='"+i+"'"+(i===Number(x.d)?" selected":"")+">"+d+"요일</option>").join("")+"</select>"+
+  st.fixed.forEach((x,n)=>{
+    soRows+="<div class='so-row' data-n='"+n+"'><select class='so-sp'>"+Object.keys(SPACES).map(k=>"<option value='"+k+"'"+(k===(x.sp||"so")?" selected":"")+">"+SPACES[k]+"</option>").join("")+"</select>"+
+      "<select class='so-d'>"+DAYS.map((d,i)=>"<option value='"+i+"'"+(i===Number(x.d)?" selected":"")+">"+d+"요일</option>").join("")+"</select>"+
       "<select class='so-p'>"+[1,2,3,4,5,6].map(p=>"<option value='"+p+"'"+(p===Number(x.p)?" selected":"")+">"+p+"교시</option>").join("")+"</select>"+
       "<select class='so-c'>"+Array.from({length:10},(_,i)=>i+1).map(c=>"<option value='"+c+"'"+(c===Number(x.c)?" selected":"")+">"+c+"반</option>").join("")+"</select></div>"});
   function slotTable(par){
@@ -409,7 +412,7 @@ function openAdminPanel(){
       h+="</tr>"});
     return h+"</table>"}
   openModal("<h2>⚙️ 관리자 설정</h2><div class='meta'>변경 후 아래 ‘저장’을 눌러야 모두에게 반영됩니다.</div>"+
-    "<h3>1. 소강당 고정 배정 (10개)</h3><div id='soEdit'>"+soRows+"</div><div class='hint' id='soWarn' style='color:var(--orange);font-size:12.5px'></div>"+
+    "<h3>1. 고정 배정 (10개) <span style='font-weight:400;font-size:12.5px;color:var(--sub)'>(공간 · 요일 · 교시 · 반)</span></h3><div id='soEdit'>"+soRows+"</div><div class='hint' id='soWarn' style='color:var(--orange);font-size:12.5px'></div>"+
     "<h3>2. 예약 가능 시간 편집 <span style='font-weight:400;font-size:12.5px;color:var(--sub)'>(숫자 = 교시, 파란색 = 예약 가능)</span></h3>"+
     "<p class='note' style='margin:2px 0 6px'><b>홀수달</b> (3·5·7·9·11·1월)</p><div class='slot-edit'>"+slotTable("odd")+"</div>"+
     "<p class='note' style='margin:10px 0 6px'><b>짝수달</b> (4·6·8·10·12월)</p><div class='slot-edit'>"+slotTable("even")+"</div>"+
@@ -425,9 +428,9 @@ function openAdminPanel(){
   document.querySelectorAll("#soEdit select").forEach(s=>s.addEventListener("change",checkWarn));checkWarn();
   el("adLogout").addEventListener("click",()=>{isAdmin=false;try{sessionStorage.removeItem(SS_ADMIN)}catch(e){};closeModal();renderAll();showToast("관리자 모드를 종료했습니다.")});
   el("adSave").addEventListener("click",async()=>{
-    const so=[...document.querySelectorAll("#soEdit .so-row")].map(row=>({
-      d:Number(row.querySelector(".so-d").value),p:Number(row.querySelector(".so-p").value),c:Number(row.querySelector(".so-c").value)}));
-    const part={so,slots:edited};
+    const fixed=[...document.querySelectorAll("#soEdit .so-row")].map(row=>({
+      sp:row.querySelector(".so-sp").value,d:Number(row.querySelector(".so-d").value),p:Number(row.querySelector(".so-p").value),c:Number(row.querySelector(".so-c").value)}));
+    const part={fixed,slots:edited,v:2};
     const nc=el("newAdCode").value.trim();if(nc)part.adminCode=nc;
     await store.saveSettings(part);closeModal();showToast("저장했습니다. 모두에게 반영됩니다.")});
 }
