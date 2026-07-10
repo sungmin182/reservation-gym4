@@ -181,7 +181,7 @@ details summary{cursor:pointer;font-weight:700;font-size:14.5px}
         <tr><th>공간</th><th>홀수달 (3·5·7·9·11·1월)</th><th>짝수달 (4·6·8·10·12월)</th></tr>
         <tr><td>강당A</td><td>금 4교시 · 목 5교시</td><td>수 6교시</td></tr>
         <tr><td>강당B</td><td>금 4교시 · 목·금 5교시 · 수 6교시</td><td>목·금 5교시 · 수 6교시</td></tr>
-        <tr><td>소강당</td><td colspan="2">목 4·5교시 예약 가능 (나머지 8개 시간은 고정 배정)</td></tr>
+        <tr><td>소강당</td><td colspan="2">수·목 4교시 예약 가능 (나머지 8개 시간은 고정 배정)</td></tr>
         <tr><td>운동장A</td><td>수 6교시</td><td>금 4교시 · 목 5교시</td></tr>
         <tr><td>운동장B</td><td>수·목 5교시</td><td>금 4교시 · 수·목 5교시</td></tr>
       </table>
@@ -225,12 +225,12 @@ const RAIN={gangA:["4-5"]};
 const DEFAULT_SETTINGS={
   adminCode:"4444",
   slots:{
-    odd:{gangA:["4-4","3-5"],gangB:["4-4","3-5","4-5","2-6"],so:["3-4","3-5"],playA:["2-6"],playB:["2-5","3-5"]},
-    even:{gangA:["2-6"],gangB:["3-5","4-5","2-6"],so:["3-4","3-5"],playA:["4-4","3-5"],playB:["4-4","2-5","3-5"]}
+    odd:{gangA:["4-4","3-5"],gangB:["4-4","3-5","4-5","2-6"],so:["2-4","3-4"],playA:["2-6"],playB:["2-5","3-5"]},
+    even:{gangA:["2-6"],gangB:["3-5","4-5","2-6"],so:["2-4","3-4"],playA:["4-4","3-5"],playB:["4-4","2-5","3-5"]}
   },
   fixed:[{sp:"gangA",d:4,p:5,c:1},{sp:"gangB",d:2,p:5,c:7},
       {sp:"so",d:0,p:4,c:10},{sp:"so",d:0,p:5,c:9},{sp:"so",d:1,p:4,c:2},{sp:"so",d:1,p:5,c:3},
-      {sp:"so",d:1,p:6,c:4},{sp:"so",d:2,p:4,c:6},{sp:"so",d:2,p:5,c:5},{sp:"so",d:4,p:4,c:8}]
+      {sp:"so",d:1,p:6,c:4},{sp:"so",d:3,p:5,c:6},{sp:"so",d:2,p:5,c:5},{sp:"so",d:4,p:4,c:8}]
 };
 
 /* ---------- 저장소 ---------- */
